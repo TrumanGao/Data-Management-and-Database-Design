@@ -1,6 +1,6 @@
-CREATE SCHEMA IF NOT EXISTS `assignment_3`;
+CREATE SCHEMA IF NOT EXISTS `assignment_6`;
 
-USE assignment_3;
+USE assignment_6;
 
 create table customers
 (
@@ -43,7 +43,7 @@ create table order_items
     constraint fk_order_id foreign key (order_id) references orders (order_id)
 );
 
-INSERT INTO assignment_3.customers (first_name, last_name, email)
+INSERT INTO assignment_6.customers (first_name, last_name, email)
 values ('Feixiang', 'Gao', 'gao.feix@northeastern.edu'),
        ('Alice', 'Wong', 'alice.wong@northeastern.edu'),
        ('Ben', 'Lee', 'ben.lee@northeastern.edu'),
@@ -56,7 +56,7 @@ values ('Feixiang', 'Gao', 'gao.feix@northeastern.edu'),
        ('Ivy', 'Tang', 'ivy.tang@northeastern.edu'),
        ('Jack', 'Guo', 'jack.guo@northeastern.edu');
 
-INSERT INTO assignment_3.products (product_name, original_price, category, stock)
+INSERT INTO assignment_6.products (product_name, original_price, category, stock)
 VALUES ('Chicken', 2.50, 'Meat', 1),
        ('Instant Noodles - Beef', 2.70, 'Instant Food', 450),
        ('Canned Tuna', 3.20, 'Instant Food', 300),
@@ -68,7 +68,7 @@ VALUES ('Chicken', 2.50, 'Meat', 1),
        ('Rice 5kg', 12.99, 'Staple Food', 250),
        ('Coffee', 6.50, 'Beverage', 180);
 
-INSERT INTO assignment_3.orders (total_price, create_date, customer_id)
+INSERT INTO assignment_6.orders (total_price, create_date, customer_id)
 VALUES (19.99, '2025-10-05 10:15:00', 7),
        (19.98, '2025-10-06 11:20:00', 2),
        (29.99, '2025-10-07 12:30:00', 1),
@@ -80,7 +80,7 @@ VALUES (19.99, '2025-10-05 10:15:00', 7),
        (79.98, '2025-10-13 18:40:00', 1),
        (30.00, '2025-10-14 19:55:00', 7);
 
-INSERT INTO assignment_3.order_items (product_id, order_id, quantity, unit_price)
+INSERT INTO assignment_6.order_items (product_id, order_id, quantity, unit_price)
 VALUES (1, 1, 1, 19.99),
        (2, 2, 2, 9.99),
        (3, 3, 1, 29.99),
@@ -99,8 +99,8 @@ SELECT c.customer_id,
        c.last_name,
        c.email,
        COUNT(o.order_id) AS orders_count
-FROM assignment_3.customers c
-         JOIN assignment_3.orders o ON c.customer_id = o.customer_id
+FROM assignment_6.customers c
+         JOIN assignment_6.orders o ON c.customer_id = o.customer_id
 WHERE YEAR(o.create_date) = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))
   and MONTH(o.create_date) = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))
 GROUP BY c.customer_id, c.first_name, c.last_name, c.email
@@ -112,7 +112,7 @@ SELECT p.category,
        SUM(oi.quantity * oi.unit_price) AS total_sales,
        SUM(oi.quantity)                 AS total_units_sold,
        COUNT(DISTINCT oi.order_id)      AS distinct_orders
-FROM assignment_3.order_items oi
-         JOIN assignment_3.products p ON oi.product_id = p.product_id
+FROM assignment_6.order_items oi
+         JOIN assignment_6.products p ON oi.product_id = p.product_id
 GROUP BY p.category
 ORDER BY total_sales DESC;
