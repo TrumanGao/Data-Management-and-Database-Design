@@ -1458,4 +1458,6 @@ SELECT CustomerID FROM Order_T;
 
 - Representation of data in graphical formats (charts, dashboards) for easier analysis (以图形格式展示数据以便分析).
 
+---
+
 _Course: DAMG 6210 - Data Management and Database Design_
