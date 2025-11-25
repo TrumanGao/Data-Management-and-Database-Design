@@ -1,4 +1,4 @@
-# DAMG 6210 复习资料：Chapters 1-7 重点总结
+# DAMG 6210 复习资料：Chapters 1-9 重点总结
 
 **课程**: Data Management and Database Desig
 **教材**: Modern Database Management (10th Edition) by Hoffer
@@ -16,6 +16,7 @@
 - [Chapter 7: Advanced SQL](#chapter-7-advanced-sql)
 - [Chapter 8: Database Application Development](#chapter-8-database-application-development)
 - [Chapter 9: Data Warehousing](#chapter-9-data-warehousing)
+- [Use Case Diagram & Class Diagram](#use-case-diagram--class-diagram)
 
 ---
 
@@ -1460,4 +1461,305 @@ SELECT CustomerID FROM Order_T;
 
 ---
 
+## Use Case Diagram & Class Diagram
+
+### Overview of UML (Unified Modeling Language)
+
+**UML (Unified Modeling Language / 统一建模语言)** is a standardized visual modeling language for specifying, visualizing, constructing, and documenting software systems. It was developed by Grady Booch, Ivar Jacobson, and James Rumbaugh, combining the best practices from various object-oriented methods.
+
+**Key Features:**
+- Language-independent and process-independent
+- Provides multiple perspectives of a system through different diagram types
+- Facilitates communication among stakeholders, developers, and domain experts
+- Current version: UML 2.2+
+
+---
+
+### 1. Use Case Diagram (用例图)
+
+#### 1.1 Definition and Purpose
+
+**Use Case Diagram** depicts the interaction between users (actors) and the system, showing what functions the system provides and who uses them. It captures the functional requirements from the user's perspective.
+
+**Primary Components:**
+- **Actors (参与者)**: Users or external systems that interact with the system
+- **Use Cases (用例)**: Actions or services the system provides to accomplish user goals
+
+#### 1.2 Key Symbols and Notation
+
+| Symbol       | Name                           | Description                                  |
+| ------------ | ------------------------------ | -------------------------------------------- |
+| Stick figure | **Actor (参与者)**             | Represents a user, role, or external system  |
+| Oval/Ellipse | **Use Case (用例)**            | Represents a specific function or service    |
+| Line         | **Association (关联)**         | Shows interaction between actor and use case |
+| Rectangle    | **System Boundary (系统边界)** | Defines the scope of the system              |
+
+#### 1.3 Relationships in Use Case Diagrams
+
+##### 1.3.1 Association (关联关系)
+- **Notation**: Solid line connecting actor to use case
+- **Meaning**: Shows that an actor participates in a use case
+- **Example**: Customer ——— Browse Catalog
+
+##### 1.3.2 Include Relationship (包含关系)
+- **Notation**: Dashed arrow with `<<include>>` stereotype
+- **Meaning**: One use case always includes the functionality of another
+- **Usage**: For extracting common functionality
+- **Example**: Place Order ----`<<include>>`----> Validate Payment
+- **Direction**: Arrow points from base use case to included use case
+
+##### 1.3.3 Extend Relationship (扩展关系)
+- **Notation**: Dashed arrow with `<<extend>>` stereotype
+- **Meaning**: One use case optionally extends another under certain conditions
+- **Usage**: For optional or exceptional behavior
+- **Example**: Basic Search ----`<<extend>>`----> Advanced Filter
+- **Direction**: Arrow points from extending use case to base use case
+
+##### 1.3.4 Generalization (泛化关系)
+- **Notation**: Solid line with hollow triangle arrowhead
+- **Meaning**: Inheritance relationship between actors or use cases
+- **Example**: Corporate Customer ———▷ Customer
+
+#### 1.4 Use Case Diagram Example
+
+**Scenario**: Online Shopping System
+
+```
+Actors: Customer, Sales Representative, Admin
+
+Use Cases:
+- Browse Catalog
+- Place Order
+- Supply Shipping Information
+- Supply Payment Information
+- Receive Confirmation
+- Manage Products (Admin only)
+```
+
+**Relationships**:
+- Customer associates with: Browse Catalog, Place Order
+- Place Order includes: Supply Shipping Information, Supply Payment Information
+- Sales Representative associates with: Receive Confirmation
+
+---
+
+### 2. Class Diagram (类图)
+
+#### 2.1 Definition and Purpose
+
+**Class Diagram** is a static structural diagram that shows the classes in a system, their attributes, methods, and relationships. It provides three perspectives:
+- **Conceptual**: Domain concepts and relationships
+- **Specification**: Interfaces and contracts
+- **Implementation**: Actual code structure
+
+#### 2.2 Class Structure (类结构)
+
+A class is represented as a rectangle divided into three compartments:
+
+```
+┌─────────────────────┐
+│   ClassName         │  ← Class Name (类名)
+├─────────────────────┤
+│   - attribute1      │  ← Attributes (属性)
+│   ## attribute2      │
+│   + attribute3      │
+├─────────────────────┤
+│   + operation1()    │  ← Operations/Methods (操作/方法)
+│   - operation2()    │
+└─────────────────────┘
+```
+
+#### 2.3 Visibility Modifiers (可见性修饰符)
+
+| Symbol | Visibility             | Meaning                                |
+| ------ | ---------------------- | -------------------------------------- |
+| `+`    | **Public (公有)**      | Accessible from anywhere               |
+| `-`    | **Private (私有)**     | Accessible only within the class       |
+| `#`    | **Protected (受保护)** | Accessible within class and subclasses |
+| `~`    | **Package (包级)**     | Accessible within the same package     |
+
+#### 2.4 Relationships in Class Diagrams
+
+##### 2.4.1 Association (关联关系)
+- **Notation**: Solid line connecting two classes
+- **Meaning**: Represents a structural relationship between classes
+- **Multiplicity (多重性)**: Indicates how many instances can participate
+
+**Multiplicity Notation**:
+| Notation      | Meaning                 |
+| ------------- | ----------------------- |
+| `1`           | Exactly one             |
+| `0..1`        | Zero or one             |
+| `*` or `0..*` | Zero or more            |
+| `1..*`        | One or more             |
+| `n..m`        | Specific range (n to m) |
+
+**Example**:
+```
+Customer 1 ————————— * Order
+    (one customer can have many orders)
+
+Order * ————————— 1 Customer
+    (many orders belong to one customer)
+```
+
+##### 2.4.2 Aggregation (聚合关系)
+- **Notation**: Hollow diamond on the container side
+- **Meaning**: "Has-a" relationship; part can exist independently of the whole
+- **Lifecycle**: Parts can survive without the whole
+- **Example**: Department ◇———— Employee
+  - Employees can exist without the department
+
+##### 2.4.3 Composition (组合关系)
+- **Notation**: Filled diamond on the container side
+- **Meaning**: Strong "contains-a" relationship; part cannot exist without the whole
+- **Lifecycle**: If the whole is destroyed, parts are destroyed too
+- **Example**: House ◆———— Room
+  - Rooms cannot exist without the house
+
+**Key Difference**:
+- **Aggregation (聚合)**: Weak ownership, independent lifecycle
+- **Composition (组合)**: Strong ownership, dependent lifecycle
+
+##### 2.4.4 Generalization/Inheritance (泛化/继承关系)
+- **Notation**: Solid line with hollow triangle arrowhead pointing to parent
+- **Meaning**: "Is-a" relationship; child inherits from parent
+- **Example**:
+```
+        Customer
+           △
+           │
+    ┌──────┴──────┐
+    │             │
+Corporate    Personal
+Customer     Customer
+```
+
+##### 2.4.5 Realization/Implementation (实现关系)
+- **Notation**: Dashed line with hollow triangle arrowhead
+- **Meaning**: Class implements an interface
+- **Example**: ConcreteClass - - - -▷ Interface
+
+##### 2.4.6 Dependency (依赖关系)
+- **Notation**: Dashed arrow
+- **Meaning**: One class uses or depends on another (weaker than association)
+- **Example**: Client - - - - > Service
+  - Changes in Service may affect Client
+
+#### 2.5 Advanced Concepts
+
+##### 2.5.1 Abstract Class (抽象类)
+- **Notation**: Class name in *italics* or marked with `{abstract}`
+- **Meaning**: Cannot be instantiated; serves as a template for subclasses
+
+##### 2.5.2 Interface (接口)
+- **Notation**: Class box with `<<interface>>` stereotype
+- **Meaning**: Defines a contract with method signatures only
+
+##### 2.5.3 Constraints (约束)
+- **Notation**: Text in curly braces `{constraint}`
+- **Common Constraints**:
+  - `{ordered}`: Elements have a specific order
+  - `{unique}`: No duplicates allowed
+  - `{subset}`: One relationship is a subset of another
+  - `{disjoint}`: Subclasses are mutually exclusive
+  - `{complete}`: All possible subclasses are shown
+  - `{incomplete}`: More subclasses may exist
+
+**Example**:
+```
+Course 1 ———— * {ordered} Offering
+    (offerings are ordered by semester)
+```
+
+#### 2.6 Complete Class Diagram Example
+
+**Scenario**: Online Shopping System
+
+```
+Customer
+─────────────────
+- customerID: int
+- name: String
+- email: String
+- phone: String
+- address: String
+─────────────────
++ register(): void
++ login(): boolean
++ updateProfile(): void
++ viewOrderHistory(): List<Order>
+
+        │ 1
+        │ has
+        │ *
+        ▼
+      Order
+─────────────────
+- orderID: int
+- orderDate: Date
+- status: String
+- totalAmount: double
+─────────────────
++ placeOrder(): void
++ cancelOrder(): void
++ updateStatus(String): void
+
+        │ 1
+        │ has
+        │ 1
+        ▼
+     Payment
+─────────────────
+- paymentID: int
+- paymentType: String
+- paymentDate: Date
+- amount: double
+─────────────────
++ processPayment(): boolean
++ refund(): void
+```
+
+**Relationships**:
+- Customer 1 ————— * Order (One customer has many orders)
+- Order 1 ————— 1 Payment (One order has one payment)
+- Order * ————— * Product (Many-to-many through CartItem)
+- Customer 1 ————— 1 ShoppingCart (One customer has one cart)
+- ShoppingCart 1 ◆————— * CartItem (Composition)
+
+---
+
+### 3. Summary of Key Differences
+
+| Feature           | Use Case Diagram             | Class Diagram                                      |
+| ----------------- | ---------------------------- | -------------------------------------------------- |
+| **Purpose**       | Functional requirements      | Structural design                                  |
+| **Focus**         | User interactions            | System structure                                   |
+| **Perspective**   | External view                | Internal view                                      |
+| **Elements**      | Actors, Use Cases            | Classes, Attributes, Methods                       |
+| **Relationships** | Association, Include, Extend | Association, Aggregation, Composition, Inheritance |
+| **When to Use**   | Requirements gathering       | Design and implementation                          |
+
+---
+
+### 4. Best Practices
+
+#### For Use Case Diagrams:
+1. **Keep it simple**: Focus on high-level functionality
+2. **Name use cases with action verbs**: "Place Order," not "Order Placement"
+3. **Identify all actors**: Include both human and system actors
+4. **Use include for reusable functionality**: Avoid duplication
+5. **Use extend sparingly**: Only for optional behavior
+
+#### For Class Diagrams:
+1. **Follow naming conventions**: UpperCamelCase for classes, lowerCamelCase for attributes
+2. **Show appropriate detail**: Don't include every getter/setter
+3. **Use multiplicity correctly**: Always specify relationship cardinality
+4. **Consider three perspectives**: Conceptual → Specification → Implementation
+5. **Apply constraints when needed**: Use `{ordered}`, `{unique}`, etc.
+6. **Distinguish aggregation vs. composition**: Understand lifecycle dependencies
+7. **Keep diagrams readable**: Split complex diagrams into multiple views
+
+---
+ 
 _Course: DAMG 6210 - Data Management and Database Design_
